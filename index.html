@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html">
+  <title>Github API Webapp</title>
+  <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body>
+  
+    <h1>Github API Webapp</h1>
+    <p class="app-desc">Enter a search term below and click the button to search GitHub resositories</p>
+    
+    <input type="text" name="ghsearch" id="ghsearch"></input>
+    <select id="sort-type">
+      <option value="best-match">Best Match</option>
+      <option value="most-star">Most Stars</option>
+      <option value="few-star">Fewest Stars</option>
+      <option value="most-fork">Most Forks</option>
+      <option value="few-fork">Fewest Forks</option>
+      <option value="rec-updated">Recently Updated</option>
+      <option value="least-updated">Least Recently Updated</option>
+    </select>
+    <br>
+    <input type="submit" value="Search" id="ghsubmitbtn"></input>
+    
+    <div id="ghapidata"></div>
+  
+<script type="text/javascript" src="scripts/main.js"></script>
+
+</script>
+</body>
+</html>
