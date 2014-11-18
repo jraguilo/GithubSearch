@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var links = {}; 
     
+    //event handlers
     $('#ghsearch').keypress(function(e){
         if(e.which == 13) {
             searchRepo();
@@ -9,6 +10,7 @@ $(document).ready(function() {
     
     $('#ghsubmitbtn').on('click', function(e){
         e.preventDefault();
+        $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>')
         searchRepo();      
     });
     
@@ -32,8 +34,12 @@ $(document).ready(function() {
         queryRepo(links['last']);      
     });
 
-
+    //prepares the search request
     function searchRepo(){
+        //hides page buttons on each new search
+        $('#pages').addClass('hidden');
+        
+        //get input and prepare search request
         var search = $('#ghsearch').val();
         var sorttype = $('#sort-type').val();
         var sort;
@@ -79,26 +85,29 @@ $(document).ready(function() {
         queryRepo(url, request);
     }
     
+    //performs the search request to GitHub API
     function queryRepo(url, request) {
-        var ghquery = $.getJSON(url, request, function(json){
-            parseLinkHeader(ghquery.getResponseHeader('link'));
+        var ghquery = $.getJSON(url, request, function(json){            
             var repocount = json.total_count;
-            var outhtml = '<p>repositories found: ' + repocount + '</p>';
-            outhtml = outhtml + '<div><p><strong>Repository List:</strong></p>';
-            $.each(json.items, function(index, value){
-                var reponame = value.full_name;
-                var repourl = value.html_url;
-                var repodesc = value.description;
-                var updated = getDateString(value.updated_at);
-                var forks = value.forks_count;
-                var stars = value.stargazers_count;
-                outhtml = outhtml + '<h3 class="repo-name"><a href="' + repourl + '">' + reponame + '</a></h3>';
+            var outhtml = '<h3><strong>Repositories Found: ' + repocount + '<strong></h3>';
+            if(repocount > 1){
+                parseLinkHeader(ghquery.getResponseHeader('link'));
+                outhtml = outhtml + '<div><h2><strong>Repository List:</strong></h2>';
+                $.each(json.items, function(index, value){
+                    var reponame = value.full_name;
+                    var repourl = value.html_url;
+                    var repodesc = value.description;
+                    var updated = getDateString(value.updated_at);
+                    var forks = value.forks_count;
+                    var stars = value.stargazers_count;
+                    outhtml = outhtml + '<h3 class="repo-name"><a href="' + repourl + '">' + reponame + '</a></h3>';
 
-                outhtml = outhtml + '<p class="repo-desc">' + repodesc + '</p>';
-                outhtml = outhtml + '<p class="repo-counts">forks: ' + forks + ' stargazers: ' + stars + '</p>';
-                outhtml = outhtml + '<p class="repo-updated">' + updated + '</p>';
+                    outhtml = outhtml + '<p class="repo-desc">' + repodesc + '</p>';
+                    outhtml = outhtml + '<p class="repo-counts">forks: ' + forks + ' stargazers: ' + stars + '</p>';
+                    outhtml = outhtml + '<p class="repo-updated">' + updated + '</p>';
                 });
-            outhtml = outhtml + '</div>'; 
+                outhtml = outhtml + '</div>'; 
+            }
             $('#ghapidata').html(outhtml);
         });    
     }

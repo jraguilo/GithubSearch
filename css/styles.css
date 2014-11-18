@@ -31,6 +31,18 @@ input[type=submit] {
   
 }
 
+#ghapidata {
+  display: block;
+  padding: 25px 0;
+}
+
+#loader {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
 .app-desc{
     font-size:16px;
     font-weight:700;
@@ -50,18 +62,6 @@ input[type=submit] {
 
 .repo-updated{
     font-size: 14px;
-}
-
-.button {
-  font: bold 11px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
 }
 
 .hidden {
