@@ -4,13 +4,24 @@ $(document).ready(function() {
     //event handlers
     $('#ghsearch').keypress(function(e){
         if(e.which == 13) {
-            searchRepo();
+            var search = $('#ghsearch').val();
+            search = sanitizeInput(search);
+            if(search.trim() != ""){
+                $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>')
+                searchRepo(search);
+            }
         }
     });
     
     $('#ghsubmitbtn').on('click', function(e){
         e.preventDefault();
-        $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>')
+        
+        var search = $('#ghsearch').val();
+            search = sanitizeInput(search);
+            if(search.trim() != ""){
+                $('#ghapidata').html('<div id="loader"><img src="css/loader.gif" alt="loading..."></div>')
+                searchRepo(search);
+            }
         searchRepo();      
     });
     
@@ -35,12 +46,13 @@ $(document).ready(function() {
     });
 
     //prepares the search request
-    function searchRepo(){
+    function searchRepo(search){
         //hides page buttons on each new search
         $('#pages').addClass('hidden');
         
         //get input and prepare search request
-        var search = $('#ghsearch').val();
+        
+        search = sanitizeInput(search);
         var sorttype = $('#sort-type').val();
         var sort;
         var order;
@@ -92,7 +104,7 @@ $(document).ready(function() {
             var outhtml = '<h3><strong>Repositories Found: ' + repocount + '<strong></h3>';
             if(repocount > 1){
                 parseLinkHeader(ghquery.getResponseHeader('link'));
-                outhtml = outhtml + '<div><h2><strong>Repository List:</strong></h2>';
+                outhtml = outhtml + '<div><h3><strong>Repository List:</strong></h3>';
                 $.each(json.items, function(index, value){
                     var reponame = value.full_name;
                     var repourl = value.html_url;
@@ -150,5 +162,10 @@ $(document).ready(function() {
         $('#pages').removeClass('hidden');
     }
   
+    //sanitizes user input
+    function sanitizeInput(input) {
+        var output = input.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ')
+	    return output;
+    }
   
 });
